@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+    <h1 class="register-heading">Registration Form</h1>
+    
+    <div class="form-container">
+        <form id="registrationForm" autocomplete="off">
+            <h2>Your Email</h2>
+            <input type="email" placeholder="Email" name="email" required autocomplete="off">
+            
+            <h2>Your Password</h2>
+            <input type="password" placeholder="Password" name="password" required autocomplete="off">
+            
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const email = event.target.email.value;
+            const password = event.target.password.value;
+
+            fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(text => { throw new Error(text.error); }); 
+                }
+                return response.json(); 
+            })
+            .then(data => {
+                alert(data.message); 
+                window.location.href = 'index.html'; 
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        });
+    </script>
+</body>
+</html>

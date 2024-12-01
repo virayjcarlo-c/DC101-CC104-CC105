@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Adoption Application</title>
+    <link rel="stylesheet" href="adoptionform.css">
+</head>
+<body>
+    <h1>Pet Adoption Application</h1>
+    
+    <div class="form-container">
+        <form id="adoptionForm">
+            <input type="text" id="applicant_name" placeholder="Applicant Name" required>
+            <input type="text" id="address" placeholder="Address" required>
+            <input type="tel" id="contact_number" placeholder="Contact Number" required>
+            <input type="email" id="email" placeholder="Email" required>
+
+            <div class="dropdown" id="petDropdownContainer">
+                <input type="text" id="petInput" placeholder="Select a pet" readonly required>
+                <div class="dropdown-content" id="petDropdown">
+                    <div data-value="Max">Max</div>
+                    <div data-value="Whiskers">Whiskers</div>
+                    <div data-value="Bella">Bella</div>
+                    <div data-value="Luna">Luna</div>
+                    <div data-value="Charlie">Charlie</div>
+                    <div data-value="Sophie">Sophie</div>
+                </div>
+            </div>
+            
+            <button type="submit">Apply for Adoption</button>
+        </form>
+    </div>
+
+    <script>
+        const petInput = document.getElementById('petInput');
+        const petDropdown = document.getElementById('petDropdown');
+        const petDropdownContainer = document.getElementById('petDropdownContainer');
+
+        petInput.addEventListener('click', () => {
+            petDropdownContainer.classList.toggle('active');
+        });
+
+        petDropdown.addEventListener('click', function(event) {
+            if (event.target.dataset.value) {
+                petInput.value = event.target.dataset.value;
+                petInput.setAttribute('data-pet', event.target.dataset.value);
+                petDropdownContainer.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('click', function(event) {
+            if (!petDropdownContainer.contains(event.target)) {
+                petDropdownContainer.classList.remove('active');
+            }
+        });
+
+        document.getElementById('adoptionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const applicantName = document.getElementById('applicant_name').value;
+            const address = document.getElementById('address').value;
+            const contactNumber = document.getElementById('contact_number').value;
+            const email = document.getElementById('email').value;
+            const pet = petInput.getAttribute('data-pet');
+            const userId = localStorage.getItem('userId'); 
+
+            fetch('http://localhost:3000/apply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ applicant_name: applicantName, address, contact_number: contactNumber, email, pet, user_id: userId }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Application submission failed.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                
+                
+                const applicationDetails = {
+                    applicantName: applicantName,
+                    address: address,
+                    contactNumber: contactNumber,
+                    email: email,
+                    pet: pet
+                };
+                localStorage.setItem('applicationDetails', JSON.stringify(applicationDetails));
+                
+                window.location.href = 'yourapplicationdetails.html'; 
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        });
+    </script>
+</body>
+</html>

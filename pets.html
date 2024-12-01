@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Pets For Adoption</title>
+    <link rel="stylesheet" href="pets.css"> 
+</head>
+<body>
+    <h1>Available Pets for Adoption</h1>
+    <div class="pets-list" id="petsList"></div>
+
+    <script>
+        const pets = [
+            {
+                name: "Max",
+                type: "Dog",
+                breed: "Golden Retriever",
+                age: "3 years",
+                description: "Friendly and playful.",
+                image: "c:/Users/USER/Documents/images/max.jpg",
+                additionalImages: [
+                    "c:/Users/USER/Documents/images/max2.jpg",
+                    "c:/Users/USER/Documents/images/max3.jpg"
+                ]
+            },
+            {
+                name: "Whiskers",
+                type: "Cat",
+                breed: "Tabby",
+                age: "2 years",
+                description: "Loves to cuddle.",
+                image: "c:/Users/USER/Documents/images/whiskers.jpg",
+                additionalImages: [
+                    "c:/Users/USER/Documents/images/whiskers2.jpg",
+                    "c:/Users/USER/Documents/images/whiskers3.jpg"
+                ]
+            },
+            {
+                name: "Bella",
+                type: "Dog",
+                breed: "Beagle",
+                age: "4 years",
+                description: "Very curious and friendly.",
+                image: "c:/Users/USER/Documents/images/bella.jpg",
+                additionalImages: [
+                    "c:/Users/USER/Documents/images/bella2.jpg",
+                    "c:/Users/USER/Documents/images/bella3.jpg"
+                ]
+            },
+            {
+                name: "Luna",
+                type: "Cat",
+                breed: "Siamese",
+                age: "1 year",
+                description: "Playful and energetic.",
+                image: "c:/Users/USER/Documents/images/luna.jpg",
+                additionalImages: [
+                    "c:/Users/USER/Documents/images/luna2.jpg",
+                    "c:/Users/USER/Documents/images/luna3.jpg"
+                ]
+            },
+            {
+                name: "Charlie",
+                type: "Dog",
+                breed: "Poodle",
+                age: "2 years",
+                description: "Smart and friendly.",
+                image: "c:/Users/USER/Documents/images/charlie.jpg",
+                additionalImages: [
+                    "c:/Users/USER/Documents/images/charlie2.jpg",
+                    "c:/Users/USER/Documents/images/charlie3.jpg"
+                ]
+            },
+            {
+                name: "Sophie",
+                type: "Cat",
+                breed: "Persian",
+                age: "3 years",
+                description: "Loves to nap.",
+                image: "c:/Users/USER/Documents/images/sophie.jpg",
+                additionalImages: [
+                    "c:/Users/USER/Documents/images/sophie2.jpg",
+                    "c:/Users/USER/Documents/images/sophie3.jpg"
+                ]
+            }
+        ];
+
+        const petsList = document.getElementById('petsList');
+
+        pets.forEach((pet, index) => {
+            const petItem = document.createElement('div');
+            petItem.classList.add('pet-item');
+            petItem.innerHTML = `
+                <img id="mainImage-${index}" src="${pet.image}" alt="${pet.name}">
+                <h2>${pet.name}</h2>
+                <p>Type: ${pet.type}</p>
+                <p>Breed: ${pet.breed}</p>
+                <p>Age: ${pet.age}</p>
+                <p>${pet.description}</p>
+                <a href="adoptionform.html" class="apply-link">Apply for Adoption</a>
+                <div class="dots">
+                    <span class="dot" onclick="changeImage(${index}, -1)"></span> 
+                    ${pet.additionalImages.map((_, imgIndex) => 
+                        `<span class="dot" onclick="changeImage(${index}, ${imgIndex})"></span>`
+                    ).join('')}
+                </div>
+            `;
+            petsList.appendChild(petItem);
+        });
+
+        function changeImage(petIndex, imgIndex) {
+            const mainImage = document.getElementById(`mainImage-${petIndex}`);
+            const pet = pets[petIndex];
+
+            
+            if (imgIndex === -1) {
+                mainImage.src = pet.image; 
+            } else if (imgIndex < pet.additionalImages.length) {
+                mainImage.src = pet.additionalImages[imgIndex]; 
+            }
+
+            
+            const dots = mainImage.parentElement.querySelectorAll('.dot');
+            dots.forEach(dot => dot.classList.remove('active'));
+            if (imgIndex === -1) {
+                dots[0].classList.add('active'); 
+            } else if (imgIndex < dots.length) {
+                dots[imgIndex + 1].classList.add('active'); 
+            }
+        }
+    </script>
+</body>
+</html>

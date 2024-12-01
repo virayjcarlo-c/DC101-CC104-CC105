@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Adoption Application Details</title>
+    <link rel="stylesheet" href="yourapplicationdetails.css"> 
+</head>
+<body>
+    <h1>Your Application Details</h1>
+    
+    <div class="details-container">
+        <div id="detailsOutput">No application details available.</div>
+        <button id="backButton">Back to Application</button>
+    </div>
+
+    <script>
+        
+        const applicationDetails = JSON.parse(localStorage.getItem('applicationDetails'));
+
+        
+        if (applicationDetails) {
+            const detailsOutput = `
+                <strong>Applicant Name:</strong> ${applicationDetails.applicantName}<br>
+                <strong>Address:</strong> ${applicationDetails.address}<br>
+                <strong>Contact Number:</strong> ${applicationDetails.contactNumber}<br>
+                <strong>Email:</strong> ${applicationDetails.email}<br>
+                <strong>Pet:</strong> ${applicationDetails.pet}
+            `;
+            document.getElementById('detailsOutput').innerHTML = detailsOutput;
+        } else {
+            document.getElementById('detailsOutput').innerHTML = 'No application details available.';
+        }
+
+        
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.location.href = 'pets.html';
+        });
+    </script>
+</body>
+</html>
